@@ -1,0 +1,24 @@
+{
+  "name": "com.devpeixoto.actionsrelay",
+  "version": "0.1.0",
+  "displayName": "Input System Action Relay",
+  "description": "A simple component that lets you dispatch events from the Inspector when a specific Action from the Input System is triggered.",
+  "unity": "6000.0",
+  "documentationUrl": "https://github.com/FellipePeixoto/",
+  "changelogUrl": "https://github.com/FellipePeixoto/InputSystemActionRelay/blob/master/CHANGELOG.md",
+  "licensesUrl": "https://github.com/FellipePeixoto/InputSystemActionRelay/blob/master/LICENSE",
+  "dependencies": {
+    "com.unity.inputsystem": "1.13.0"
+  },
+  "keywords": [
+    "devpeixoto",
+    "Fellipe Peixoto",
+    "Input System",
+    "Events"
+  ],
+  "author": {
+    "name": "Fellipe Peixoto",
+    "email": "devpeixoto@gmail.com",
+    "url": "https://www.devpeixoto.com/gamedeveloper"
+  }
+}

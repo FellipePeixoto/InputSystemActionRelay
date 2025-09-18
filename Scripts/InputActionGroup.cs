@@ -90,7 +90,7 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
             if (InputActionRef == null)
                 return;
 
-            inputAction = InputActionRef.ToInputAction();
+            inputAction = InputActionRef.action.Clone();
             inputAction.Enable();
             onStarted.AddListener(HandleOnStarted);
             onPerformed.AddListener(HandleOnPerformed);

@@ -8,10 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Player Input Based action relay
+- Nothing
 
 ### Changed
-- Nothing yet
+- Player Input Action Relay must be set manually now
 
 ### Deprecated
 - Nothing yet
@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Nothing
+
+## [0.3.0]
+
+### Changed
+- Player Input Action Relay must be set manually now
 
 ## [0.2.0] - 2025-09-17
 

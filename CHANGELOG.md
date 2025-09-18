@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Ignore/Include Device Feature to Action Relay
+- Player Input Based action relay
 
 ### Changed
 - Nothing yet
@@ -20,7 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing yet
 
 ### Fixed
-- Make The Input Action independent from the player input
+- Nothing
+
+## [0.2.0] - 2025-09-17
+
+### Added
+- Player Input Based action relay
 
 ## [0.1.1] - 2025-09-17
 
@@ -36,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First version
 
 ### Known Issues
+
 - OnPerformed isn’t synchronized with OnPerformed from the Input System (possible Input System bug?)
 
 ## Future Roadmap

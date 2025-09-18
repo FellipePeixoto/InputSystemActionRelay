@@ -1,6 +1,6 @@
 {
   "name": "com.devpeixoto.actionsrelay",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Input System Action Relay",
   "description": "A simple component that lets you dispatch events from the Inspector when a specific Action from the Input System is triggered.",
   "unity": "6000.0",

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Nothing yet
+- Ignore/Include Device Feature to Action Relay
 
 ### Changed
 - Nothing yet
@@ -20,7 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing yet
 
 ### Fixed
-- Nothing yet
+- Make The Input Action independent from the player input
+
+## [0.1.1] - 2025-09-17
+
+### Added
+- Ignore/Include Device Feature to Action Relay
+
+### Fixed
+- Make The Input Action independent from the player input
 
 ## [0.1.0] - 2025-09-12
 

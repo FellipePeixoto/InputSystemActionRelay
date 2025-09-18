@@ -1,9 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 {
@@ -24,19 +28,19 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 
         [SerializeField] bool inputActionHasHoldInteraction;
 
-        void Clear()
-        {
-            if (holdCoroutine != null)
-                coroutineRunner.StopCoroutine(holdCoroutine);
-
-            holdCoroutine = null;
-            onStarted.AddListener(HandleOnStarted);
-            onPerformed.AddListener(HandleOnPerformed);
-            onCanceled.AddListener(HandleOnCanceled);
-        }
+        List<InputCtxContainer> ignoredDevices = new List<InputCtxContainer>();
 
         void HandleOnStarted(InputAction.CallbackContext ctx)
         {
+            var target = ignoredDevices.FirstOrDefault(x => ctx.control.device == x.device);
+            if (target != null)
+            {
+                target.ctx = ctx;
+                return;
+            }
+
+            onStarted?.Invoke(ctx);
+
             switch (ctx.interaction)
             {
                 case HoldInteraction hold:
@@ -55,6 +59,11 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 
         void HandleOnPerformed(InputAction.CallbackContext ctx)
         {
+            if (ignoredDevices.Select(x => x.device).Contains(ctx.control.device))
+                return;
+
+            onPerformed?.Invoke(ctx);
+
             switch (ctx.interaction)
             {
                 case HoldInteraction hold:
@@ -68,6 +77,11 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 
         void HandleOnCanceled(InputAction.CallbackContext ctx)
         {
+            if (ignoredDevices.Select(x => x.device).Contains(ctx.control.device))
+                return;
+
+            onCanceled?.Invoke(ctx);
+
             switch (ctx.interaction)
             {
                 case HoldInteraction hold:
@@ -85,6 +99,37 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
             }
         }
 
+        internal void IgnoreDevice(InputDevice device)
+        {
+            if (ignoredDevices.Select(x => x.device).Contains(device))
+                return;
+
+            ignoredDevices.Add(new InputCtxContainer() { device = device });
+        }
+
+        internal void IncludeIgnoreDevice(InputDevice device)
+        {
+            var target = ignoredDevices.FirstOrDefault(x => x.device == device);
+
+            if (target != null && (
+                target.ctx.phase == InputActionPhase.Waiting ||
+                target.ctx.phase == InputActionPhase.Performed ||
+                target.ctx.phase == InputActionPhase.Canceled))
+            {
+                ignoredDevices.Remove(target);
+            }
+            else if (target != null)
+            {
+                coroutineRunner.StartCoroutine(WaitToDeleteIgnoreCo(target.ctx, target));
+            }
+        }
+
+        IEnumerator WaitToDeleteIgnoreCo(CallbackContext ctx, InputCtxContainer toRemove)
+        {
+            yield return new WaitUntil(() => ctx.phase == InputActionPhase.Waiting);
+            ignoredDevices.Remove(toRemove);
+        }
+
         public void OnEnable()
         {
             if (InputActionRef == null)
@@ -92,12 +137,9 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 
             inputAction = InputActionRef.action.Clone();
             inputAction.Enable();
-            onStarted.AddListener(HandleOnStarted);
-            onPerformed.AddListener(HandleOnPerformed);
-            onCanceled.AddListener(HandleOnCanceled);
-            inputAction.started += onStarted.Invoke;
-            inputAction.performed += onPerformed.Invoke;
-            inputAction.canceled += onCanceled.Invoke;
+            inputAction.started += HandleOnStarted;
+            inputAction.performed += HandleOnPerformed;
+            inputAction.canceled += HandleOnCanceled;
         }
 
         public void OnDisable()
@@ -107,9 +149,17 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 
             inputAction.Disable();
             Clear();
-            inputAction.started -= onStarted.Invoke;
-            inputAction.performed -= onPerformed.Invoke;
-            inputAction.canceled -= onCanceled.Invoke;
+            inputAction.started -= HandleOnStarted;
+            inputAction.performed -= HandleOnPerformed;
+            inputAction.canceled -= HandleOnCanceled;
+        }
+
+        void Clear()
+        {
+            if (holdCoroutine != null)
+                coroutineRunner.StopCoroutine(holdCoroutine);
+
+            holdCoroutine = null;
         }
 
 #if UNITY_EDITOR
@@ -192,6 +242,12 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 
                 OnPerformed();
             }
+        }
+
+        class InputCtxContainer
+        {
+            public InputDevice device;
+            public InputAction.CallbackContext ctx;
         }
     }
 }

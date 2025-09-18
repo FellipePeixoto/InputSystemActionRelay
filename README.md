@@ -9,7 +9,7 @@ A simple component that lets you dispatch events from the Inspector when a speci
 
 ## Installation
 
-Just add this repository as a package in your project
+Add this git url as package: <pre>```https://github.com/FellipePeixoto/InputSystemActionRelay.git```</pre>
 
 ## Usage
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
 {
@@ -22,6 +23,22 @@ namespace DevPeixoto.InputSystemUtils.InputSystemActionRelay
             foreach (var group in inputActionGroups)
             {
                 group.OnDisable();
+            }
+        }
+
+        public void IgnoreDevice(InputDevice device)
+        {
+            foreach (var group in inputActionGroups)
+            {
+                group.IgnoreDevice(device);
+            }
+        }
+
+        public void IncludeIgnoredDevice(InputDevice device)
+        {
+            foreach (var group in inputActionGroups)
+            {
+                group.IncludeIgnoreDevice(device);
             }
         }
 
